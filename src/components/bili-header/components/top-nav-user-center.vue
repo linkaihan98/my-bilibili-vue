@@ -1,12 +1,12 @@
 <template>
-  <div>
-      ranking
-  </div>
+    <div class="top-nav-user-center">
+        user
+    </div>
 </template>
 
 <script>
 export default {
-
+    
 }
 </script>
 

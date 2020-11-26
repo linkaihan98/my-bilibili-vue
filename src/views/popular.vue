@@ -1,7 +1,7 @@
 <template>
-    <div class="nav-search-box">
-        search
-    </div>
+  <div>
+      popular
+  </div>
 </template>
 
 <script>

@@ -1,51 +1,72 @@
 <template>
     <div  class="bili-banner"
-        :style="`background: #f9f9f9  url(${bannerList.pic}) center  no-repeat`">
+        :style="`background-image: url(${bannerList.pic})`">
         <div class="banner-shadow"></div>
         <div class="banner-logo b-wrap">
-            <a href="/#/" class="banner-logo-a">
-                <img :src="bannerList.litpic" alt="biliLogo">
+            <a :href="bannerList.url || '/#/'" class="banner-logo-link">
+                <img :src="bannerList.logo" alt="biliLogo">
             </a>
+            <!-- banner有宣传活动，展示该宣传的链接标题-->
+            <a v-if="bannerList.title" 
+                target="_blank" 
+                class="banner-title-link" 
+                :href="bannerList.url"
+            >{{bannerList.title}}</a>
         </div>
+        <!-- banner有宣传活动，点击banner进行跳转-->
+        <a v-if="bannerList.title"
+            target="_blank"
+            class="banner-link"
+            :href="bannerList.url"
+        ></a>
     </div>
 </template>
 
 <script>
-import { getBanner, getFrontpage } from './../../../api/header.js';
+import { getBanner } from './../../../api/header.js';
 
 export default {
     props: {
         menuConfig: {},
+        menuName: String
     },
     data() {
         return {
             menuList: this.menuConfig.MenuConfig,
-            bannerList: {}
+            bannerList: {
+                pic: '',
+                logo: '',
+                title: '',
+                url: ''
+            }
         }
     },
     methods: {  
-        getBannerData() {
-            getBanner().then((response) => {
+        getBannerData(menuName) {
+            // getBanner()为首页banner与分区banner两个不同接口合并的api
+            // 通过三元表达式进行数据格式化
+            const isMain = menuName === 'main';
+            getBanner(menuName).then((response) => {
                 const res = response.data;
-                if (res && res.code === 0 && res.data) {                 
-                    this.bannerList = res.data[0];
+                if (res && res.code === 0 && res.data) {     
+                    const resList = isMain ? res.data[0] : res.data;
+                    this.bannerList.pic = isMain ? resList.pic : resList.litpic;
+                    this.bannerList.logo = isMain ? resList.litpic : resList.logo;
+                    this.bannerList.title = isMain ? (resList.name || '') : (resList.title || '');
+                    this.bannerList.url = isMain ? (resList.url || '') : (resList.jump_url || '');
                 }
             }, (error) => {
                 throw error;
             })            
         }
     },
-    computed: {
-        categoryList: function() {
-            const arr = [];
-            this.menuList.forEach((item) => {
-                arr.push(item.route);
-            });
-            return arr;
-        },
+    watch: {
+        menuName: function(newVal) {
+            this.getBannerData(newVal)
+        }
     },
     created() {
-        this.getBannerData();
+        this.getBannerData(this.menuName);
     }
 }
 </script>
@@ -61,7 +82,10 @@ export default {
     height: 9.375vw   
     display: flex
     justify-content: center
-    //background: #f9f9f9  url('http://i0.hdslb.com/bfs/archive/9660bf249e0163b640ead47f1b5c9ca6acef2322.png') center  no-repeat
+    background-color: #f9f9f9 
+    background-repeat: no-repeat;
+    background-position: center 0;
+    background-size: cover;
     .banner-shadow
         pointer-events: none;
         position: absolute;
@@ -73,7 +97,7 @@ export default {
         background: linear-gradient(rgba(0, 0, 0, 0.4), transparent);
     .banner-logo
         position: relative
-        .banner-logo-a
+        .banner-logo-link
             position: absolute
             bottom: 10px
             left: 0
@@ -83,5 +107,28 @@ export default {
             height: 50%
             img 
                 height: 100%
+        .banner-title-link
+            position: absolute;
+            bottom: 25px;
+            left: 280px;
+            max-width: 350px;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            line-height: 20px;
+            color: #fff;
+            background-color: rgba(0,0,0,.68);
+            opacity: 0;
+            transition: opacity .3s;
+    .banner-link
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 0;
+        height: 100%;
+        width: 100%;
+    &:hover
+        .banner-title-link
+            opacity: 1;
 
 </style>

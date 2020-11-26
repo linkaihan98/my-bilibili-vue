@@ -4,11 +4,11 @@ import Router from 'vue-router';
 Vue.use(Router);
 
 import home from './../views/home';
-import main from './../views/main';
+import biliMain from './../components/bili-main';
 import menu from './../views/menu';
+import popular from './../views/popular';
 import register from './../views/register';
 import login from './../views/login';
-import ranking from './../views/ranking';
 import channel from './../views/channel';
 import read from './../views/read';
 import blackboard from './../views/blackboard';
@@ -26,7 +26,11 @@ export default new Router({
                 {
                     path: '/main',
                     name: 'main',
-                    component: main
+                    component: biliMain
+                }, {
+                    path: '/v/popular',
+                    name: 'popular',
+                    component: popular
                 }, {
                     path: '/v/:menuId',
                     name: 'menu',
@@ -41,10 +45,6 @@ export default new Router({
                     component: login
                 }
             ]
-        }, {
-            path: '/ranking',
-            name: 'ranking',
-            component: ranking
         }, {
             path: '/channel',
             name: 'channel',

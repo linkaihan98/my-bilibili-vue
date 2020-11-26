@@ -1486,7 +1486,7 @@ export const SideMenuConfig = [
 export const ChannelMenuConfig = [
   {
     name: '搞笑',
-    url: '//www.bilibili.com/v/life/funny',
+    route: 'life/funny',
     tid: 138,
     count: '',
     hidePopover: true,
@@ -1494,7 +1494,7 @@ export const ChannelMenuConfig = [
   },
   {
     name: '动物圈',
-    url: '//www.bilibili.com/v/life/animal',
+    route: 'life/animal',
     tid: 75,
     count: '',
     hidePopover: true,
@@ -1502,7 +1502,7 @@ export const ChannelMenuConfig = [
   },
   {
     name: '美食',
-    url: '//www.bilibili.com/v/food',
+    route: 'food',
     tid: 211,
     count: '',
     hidePopover: true,
@@ -1510,7 +1510,7 @@ export const ChannelMenuConfig = [
   },
   {
     name: '单机游戏',
-    url: '//www.bilibili.com/v/game/stand_alone',
+    route: 'game/stand_alone',
     tid: 17,
     count: '',
     hidePopover: true,
@@ -1518,7 +1518,7 @@ export const ChannelMenuConfig = [
   },
   {
     name: 'VLOG',
-    url: '//www.bilibili.com/v/life/daily/#/530003',
+    route: 'life/daily',
     hidePopover: true,
     // 隐藏数字显示
     hideCount: true,
@@ -1530,7 +1530,7 @@ export const ChannelMenuConfig = [
 export const TabMenuConfig = [
   {
     name: '首页',
-    url: '/',
+    url: '/#/main',
     backgroundColor: 'bgc-red',
     icon: 'shouyeweixuanzhong'
   },
@@ -1542,7 +1542,7 @@ export const TabMenuConfig = [
   },
   {
     name: '热门',
-    url: '/#/popular',
+    url: '/#/v/popular',
     backgroundColor: 'bgc-pink',
     icon: 'ranking'
   },

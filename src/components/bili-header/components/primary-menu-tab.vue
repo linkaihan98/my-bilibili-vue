@@ -23,10 +23,7 @@
 export default {
   data() {
     return {
-      // info: {},
-      // channelInfo: {
-      //   
-      // },
+      
     }
   },
   props: {

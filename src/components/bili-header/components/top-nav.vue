@@ -1,24 +1,24 @@
 <template>
     <div class="top-nav" :class="{show_TopNav_only: showTopNavOnly}"> 
         <div class="top-nav-content">
-            <nav-link :showTopNavOnly="showTopNavOnly"></nav-link>
-            <nav-search></nav-search>
-            <nav-user-center></nav-user-center>
+            <top-nav-link :showTopNavOnly="showTopNavOnly"></top-nav-link>
+            <top-nav-search></top-nav-search>
+            <top-nav-user-center></top-nav-user-center>
         </div>
     </div>
 </template>
 
 <script>
-import NavLink from './nav-link';
-import NavSearch from './nav-search';
-import NavUserCenter from './nav-user-center';
+import TopNavLink from './top-nav-link';
+import TopNavSearch from './top-nav-search';
+import TopNavUserCenter from './top-nav-user-center';
 
 export default {
     name: 'TopNav',
     components: {
-        NavLink,
-        NavSearch,
-        NavUserCenter
+        TopNavLink,
+        TopNavSearch,
+        TopNavUserCenter
     },
     props: {
         showTopNavOnly: Boolean,

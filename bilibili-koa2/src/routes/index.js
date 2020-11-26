@@ -10,7 +10,7 @@ const {
   deleteUser
 } = require('./../controllers/user')
 const { getBanner } = require('./../controllers/banner')
-const { getFrontpage } = require('./../controllers/frontpage')
+const { getRegionCount } = require('./../controllers/count')
 
 router.get('/', async (ctx, next) => {
   await ctx.render('index', {
@@ -52,13 +52,13 @@ router.delete('/users/:id', async (ctx, next) => {
 });
 
 //banner
-router.get('/banner', async (ctx, next) => {
+router.get('/banner/:resid', async (ctx, next) => {
   getBanner(ctx, next)
 })
 
-//frontpage
-router.get('/frontpage/:resid', async (ctx, next) => {
-  getFrontpage(ctx, next)
+//getRegionCount
+router.get('/count', async (ctx, next) => {
+  getRegionCount(ctx, next)
 })
 
 module.exports = router

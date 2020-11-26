@@ -75,7 +75,7 @@
 
 <script>
 export default {
-    name: 'NavLink',
+    name: 'TopNavLink',
     props: {
         showTopNavOnly: Boolean,
         menuConfig: {}

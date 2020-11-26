@@ -17,21 +17,18 @@
 </template>
 
 <script>
-//import { getCountData } from 'src/api'
+import { getRegionCount } from './../../../../src/api/header'
 
 export default {
   props: {
     menuConfig: {},
-    tid: {
-      type: Number,
-      default: null
-    }
+    menuName: String
   },
   data() {
     return {
       menuList: this.menuConfig.MenuConfig,
-      isWide: true,
-      countData: {"1":268,"11":0,"119":21,"129":171,"13":17,"138":349,"155":188,"160":3370,"165":0,"167":42,"17":668,"177":3,"181":684,"188":176,"202":10,"211":261,"23":0,"3":669,"36":497,"4":3280,"5":631,"75":215,"76":44}, //用于存储online 接口返回的count
+      //isWide: true,
+      regionCount: {},
     }
   },
   computed: {
@@ -56,99 +53,73 @@ export default {
         if (item.name === '放映厅') {
           return {
             ...item,
-            count: (this.countData[23] || 0) + (this.countData[11] || 0) + (this.countData[177] || 0)
+            count: (this.regionCount[23] || 0) + (this.regionCount[11] || 0) + (this.regionCount[177] || 0)
           }
         } else {
           return {
             ...item,
-            count: this.countData[item.tid],
+            count: this.regionCount[item.tid],
           }
         }
       })
     },
     navList() {
-      const sortedArr = this.menuList //this.swapArrayItemByTid(3, 167)
-      const newArr = sortedArr.filter(item=>item.tid && ![177, 23, 11].includes(item.tid))
+      const sortedArr = this.menuList;
+      const newArr = sortedArr.filter(item=>item.tid && ![177, 23, 11].includes(item.tid));
 
-      const sub = sortedArr.filter(item=>[177, 23, 11].includes(item.tid)).map(item=>{return { ...item, combination: true }})
+      const sub = sortedArr.filter(item=>[177, 23, 11].includes(item.tid)).map(item=>{return { ...item, combination: true }});
       const cinema = {
         name: '放映厅',
         tid: 23,
-        url: '/#/cinema/',
+        route: 'cinema',
         count: '',
         subMenuSize: 68,
         combination: true,
         sub,
       }
-
-      //console.log(sortedArr, newArr, sub)
-
-      this.$set(cinema, 'selected', false)
-
-      return newArr.concat([cinema]).filter(item => !item.isHide)
+      return newArr.concat([cinema]).filter(item => !item.isHide);
     },
+    isWide() {
+      return this.$route.path === '/main' && (document.body.clientWidth || window.screen.width || window.innerWidth) > 1438;
+    }
   },
   methods: {
     channelLink(nav){
-      const tid = nav.tid
-      
-      //console.log(tid)
-      //debugger
-
+      //const tid = nav.tid;
       if(nav.name === '更多') {
-        return 'javascript:;'
+        return 'javascript:;';
       }
-      if(nav.combination){
-        //组合的item 直接返回url
-        return nav.url
-      }else {
-        return '/#/v/' + nav.route + '/'
-      }
+      return `/#/v/${nav.route}`;
     },
-    subChannelLink(nav,sub){
-      return sub.combination || !sub.tid ? sub.url : `/#/v/${nav.route}/${sub.route}/`
-    },
-    // async updateCount() {
-    //   const { data } = await getOnline()
-    //   if(data.code === 0 && data.data) {
-    //     this.countData = data.data.region_count
-    //   }
+    // subChannelLink(nav,sub){
+    //   return sub.combination || !sub.tid ? sub.url : `/#/v/${nav.route}/${sub.route}/`
     // },
-    getCount(num) {
-      return (num > 999 ? '999+' : num) || '--'
-    },
-    onSize() {
-      this.isWide = (document.body.clientWidth || window.screen.width || window.innerWidth) > 1438
-    },
-    setCurrentState(item) {
-      let _tid = this.tid
-
-      //console.log(_tid)
-      //debugger
-
-      // 纪录片、电影、电视剧聚合到放映厅
-      if(_tid === 177 || _tid === 11){
-        _tid = 23
+    async updateCount() {
+      const { data } = await getRegionCount();
+      if(data.code === 0 && data.data) {
+        this.regionCount = data.data.region_count;
       }
-      return item.tid === _tid
+    },
+    getCount(num) {
+      return (num > 999 ? '999+' : num) || '--';
+    },
+    // onSize() {
+    //   this.isWide = this.$route.path === '/main' && (document.body.clientWidth || window.screen.width || window.innerWidth) > 1438;
+    // },
+    //手动切换菜单栏时对应的item高亮
+    setCurrentState(item) {
+      let route = item.route;
+      // 纪录片、电影、电视剧聚合到放映厅
+      if(route === 'movie' || route === 'tv'){
+        route = 'cinema';
+      }
+      return this.menuName === route;
     }
   },
-  // beforeMount() {
-  //     this.tid = window.bid || window.tid || window.topid
-  //   if(!this.tid) {
-  //     const path = window.location.pathname
-  //     const name = path.split('/')[2]
-  //     const currentMenu = this.menuConfig.MenuConfig.filter(menu => {
-  //       return menu.route === name && !menu.takeOvered
-  //     })
-  //     this.tid = currentMenu[0] && currentMenu[0].tid
-  //   }
-  // },
   mounted() {
-    //this.updateCount()
-
-    this.onSize()
-    window.addEventListener('resize', ()=>this.onSize())
+    this.updateCount();
+    //this.onSize();
+    //window.addEventListener('resize', ()=>this.onSize());
   },
 }
 

@@ -1,9 +1,11 @@
 import axios from 'axios';
 
-export const getBanner = () => {
-    return axios.get('/api/banner')  
+// 获取首页及各分区的banner数据
+export const getBanner = (menuPath) => {
+    return axios.get(`/api/banner/${menuPath}`);
 }
 
-export const getFrontpage = (resid) => {
-    return axios.get(`/api/frontpage/${resid}`)
+// 获取primary-menu各菜单更新数字
+export const getRegionCount = () => {
+    return axios.get('/api/count');
 }

@@ -1,7 +1,7 @@
 <template>
-    <div class="nav-user-center">
-        user
-    </div>
+  <div class="storey-box">
+      分区楼层
+  </div>
 </template>
 
 <script>

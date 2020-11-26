@@ -1,8 +1,8 @@
 <template>
   <div id="bili-header" class="bili-header">
     <top-nav :menuConfig="menuConfig" :showTopNavOnly="showTopNavOnly"></top-nav>
-    <banner v-if="!showTopNavOnly" :menuConfig="menuConfig"></banner>
-    <primary-menu v-if="!showTopNavOnly" :menuConfig="menuConfig" ></primary-menu>
+    <banner v-if="!showTopNavOnly" :menuConfig="menuConfig" :menuName="menuName"></banner>
+    <primary-menu v-if="!showTopNavOnly && showMenu" :menuConfig="menuConfig" :menuName="menuName"></primary-menu>
   </div>
 </template>
 
@@ -20,13 +20,9 @@ export default {
     Banner,
     PrimaryMenu
   },
-  props: {
-    
-  },
   data() {
       return {
           //showTopNavOnly: false,
-          tid: '',
           menuConfig: {
             MenuConfig: [],
             LiveMenuConfig: [],
@@ -36,59 +32,41 @@ export default {
       }
   },
   computed: {
-
+    // 缓存以‘/v/’开头的各个分区名以及首页main
+    //应用场景： 1.控制header渲染；2.更新banner；3.手动切换菜单栏时对应的item高亮
+    menuName: function() {
+      const name = this.$route.path.split('/')[2];
+      const currentMenu = this.menuConfig.MenuConfig.filter(menu => {
+        return menu.route === name || name === 'cinema';
+      })
+      if (currentMenu[0]) {
+        return name === 'cinema' ? 'cinema' : currentMenu[0].route;
+      } else if (this.$route.path === '/main' || this.$route.path === '/v/popular') {
+        return 'main';
+      } else {
+        return null;
+      }
+    },
+    // 热门页面/v/popular保持banner渲染，移除primary-menu
+    showMenu: function() {
+      return this.$route.path !== '/v/popular';
+    },
     // 控制banner和primary-menu两个组件是否渲染
     // 需要渲染的页面包括：首页，以‘/v/’开头的各个分区
     showTopNavOnly: function() {
-      const pathReg = /^\/v\//;
-      if (
-        this.$route.path === '/main'|| 
-        this.$route.path === '/anime'|| 
-        pathReg.test(this.$route.path)
-      ) {
+      if (this.menuName) {
         return false;
       } else {
         return true;
       }
     },
-    
   },
-
-  beforeMount() {
-    this.tid = window.bid || window.tid || window.topid
-    if(!this.tid) {
-      const path = window.location.pathname
-      const name = path.split('/')[2]
-      const currentMenu = this.menuConfig.MenuConfig.filter(menu => {
-        return menu.route === name && !menu.takeOvered
-      })
-      this.tid = currentMenu[0] && currentMenu[0].tid
-    }
-
-    // 登录后回调
-    // window.onLoginInfoLoaded(info => {
-    //   // eslint-disable-next-line no-console
-    //   this.onLoginUpdate(info)
-    // }, true)
-
-    // 获取运营位数据
-    //this.getLocsData()
-
-    // 暴露手动修改tid方法 场景：手动切换导航高亮
-    window.setTid = (id) =>{
-      this.tid = id
-    }
-
-    //合并log-reporter.js
-    //if(!window.reportObserver) {
-    //  getScript('//s1.hdslb.com/bfs/seed/log/report/log-reporter.js')
-    //}
-  },
-
   created() {
     this.menuConfig = menuConfig
-  }
-
+  },
+  mounted() {
+     
+  },
 }
 </script>
 
@@ -98,16 +76,14 @@ export default {
   width: 1630px;
   margin: 0 auto;
 
-
 @media screen and (max-width: 1870px)
   .b-wrap 
     width: 1414px;
-    // .page-tab .con li 
-    //   width: 58px;
-    //   .channel-name 
-    //     width: 58px !important;     
-    // .friendship-link  
-    //   width: 242px;  
+    .primary-menu-tab 
+      .tab-li 
+        width: 58px;
+    .primary-menu-link
+      width: 242px;  
 
 @media screen and (max-width: 1654px)
   .b-wrap 
