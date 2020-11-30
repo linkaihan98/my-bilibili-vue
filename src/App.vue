@@ -18,4 +18,5 @@ export default {
 
 <style lang="stylus">
 @import "./style/base"
+@import "./style/popover"
 </style>

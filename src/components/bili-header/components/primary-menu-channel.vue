@@ -1,18 +1,32 @@
 <template>
   <div class="primary-menu-channel">
-    <div 
+    <el-popover 
       class="channel-item" 
       v-for="(item, index) in sortedMenu" 
-      :key="`channel${index}`" 
+      :key="`channel${index}`"
+      trigger="hover"
+      :width="popWidth(item)"
+      :placement="placement(index)" 
+      :offset="offset(index)"
+      :disabled="item.hidePopover"
+      :open-delay="150"
     >
-      <a :href="channelLink(item)" class="item-link" :class="{'on' : setCurrentState(item)}">
-        <span>{{item.name}}<em v-show="!item.hideCount" class="item-count">{{getCount(item.count)}}</em></span>
-        <svg v-if="item.name === '更多'" class="icon icon-more" aria-hidden="true">
-            <use xlink:href="#icon-xia"></use>
-        </svg>
-        <!-- <a class="name" :href="subChannelLink(item, subItem)" v-for="(subItem, subIndex) in item.sub" :key="`subchannel-${subIndex}`">{{`${subItem.name} - `}}</a> -->
-      </a>
-    </div>
+      <div class="sub-container">
+        <div class="sub-item">
+          <a class="sub-item-name" :href="subChannelLink(item, subItem)" v-for="(subItem, subIndex) in item.sub" :key="`subchannel-${subIndex}`">
+              {{subItem.name}}
+          </a>
+        </div>
+      </div>
+      <div slot="reference" class="channel-item-slot" >
+        <a :href="channelLink(item)" class="item-link" :class="{'on' : setCurrentState(item)}">
+          <span>{{item.name}}<em v-show="!item.hideCount" class="item-count">{{getCount(item.count)}}</em></span>
+          <svg v-if="item.name === '更多'" class="icon icon-more" aria-hidden="true">
+              <use xlink:href="#icon-xia"></use>
+          </svg>
+        </a>
+      </div>
+    </el-popover>
   </div>
 </template>
 
@@ -28,7 +42,7 @@ export default {
     return {
       menuList: this.menuConfig.MenuConfig,
       //isWide: true,
-      regionCount: {},
+      regionCount: {}
     }
   },
   computed: {
@@ -84,6 +98,18 @@ export default {
     }
   },
   methods: {
+    // element-ui popover弹框宽度
+    popWidth(item) {
+      return item.subMenuSize || 0;
+    },
+    // element-ui popover弹框位置
+    placement(index) {
+      return index % 2 ? 'bottom-start' : 'top-start';
+    },
+    // element-ui popover出现位置的偏移量
+    offset(index) {
+      return index % 2 ? -10 : 10;
+    },
     channelLink(nav){
       //const tid = nav.tid;
       if(nav.name === '更多') {
@@ -91,9 +117,9 @@ export default {
       }
       return `/#/v/${nav.route}`;
     },
-    // subChannelLink(nav,sub){
-    //   return sub.combination || !sub.tid ? sub.url : `/#/v/${nav.route}/${sub.route}/`
-    // },
+    subChannelLink(nav,sub){
+      return sub.combination || !sub.tid ? sub.url : `/#/v/${nav.route}/${sub.route}/`
+    },
     async updateCount() {
       const { data } = await getRegionCount();
       if(data.code === 0 && data.data) {
@@ -114,7 +140,7 @@ export default {
         route = 'cinema';
       }
       return this.menuName === route;
-    }
+    },
   },
   mounted() {
     this.updateCount();
@@ -137,34 +163,35 @@ export default {
   .channel-item
     display: flex;
     height: 34px;
-    cursor: pointer;
-    .item-link
-      font-size: 14px;
-      display: flex;
-      align-items: center;
-      white-space: nowrap;
-      .item-count
-        display: inline-block;
-        width: 32px;
-        margin-left: 1px;
-        border-radius: 2px;
-        font-style: normal;
-        font-size: 12px;
-        text-align: center;
-        color: #fff;
-        background: #73C9E5;
-        transform: scale(.85);
-      &.on
-        color: #00a1d6;
-    &.hide
-       width: 35px;
-    .icon-more
-      margin-left: 5px;
-      transition: all .3s;
-    &.selected
-      .name
-        color: #00a1d6;
+    cursor: pointer;  
+    .channel-item-slot
+      .item-link
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        white-space: nowrap;
+        .item-count
+          display: inline-block;
+          width: 32px;
+          margin-left: 1px;
+          border-radius: 2px;
+          font-style: normal;
+          font-size: 12px;
+          text-align: center;
+          color: #fff;
+          background: #73C9E5;
+          transform: scale(.85);
+        &.on
+          color: #00a1d6;
+      &.hide
+        width: 35px;
       .icon-more
-        transform: rotate(180deg);
+        margin-left: 5px;
+        transition: all .3s;
+      &.selected
+        .name
+          color: #00a1d6;
+        .icon-more
+          transform: rotate(180deg);
 
 </style>

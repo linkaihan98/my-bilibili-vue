@@ -1,16 +1,12 @@
 const router = require('koa-router')()
-const {
-  login,
-  register
-} = require('./../controllers/auth')
-const {
-  listUsers,
-  showUserDetail,
-  updateUser,
-  deleteUser
-} = require('./../controllers/user')
+const { login, register } = require('./../controllers/auth')
+
+const { listUsers, showUserDetail, updateUser, deleteUser } = require('./../controllers/user')
+
 const { getBanner } = require('./../controllers/banner')
 const { getRegionCount } = require('./../controllers/count')
+
+const { getRotation, getRecommend, getExtension, getAd } = require('./../controllers/report')
 
 router.get('/', async (ctx, next) => {
   await ctx.render('index', {
@@ -60,5 +56,19 @@ router.get('/banner/:resid', async (ctx, next) => {
 router.get('/count', async (ctx, next) => {
   getRegionCount(ctx, next)
 })
+
+// report 相关的路由
+router.get('/rotation', async (ctx, next) => {
+  getRotation(ctx, next)
+});
+router.get('/recommend', async (ctx, next) => {
+  getRecommend(ctx, next)
+});
+router.get('/extension', async (ctx, next) => {
+  getExtension(ctx, next)
+});
+router.get('/ad', async (ctx, next) => {
+  getAd(ctx, next)
+});
 
 module.exports = router
