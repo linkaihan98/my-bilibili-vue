@@ -36,12 +36,12 @@ import { getRegionCount } from './../../../../src/api/header'
 export default {
   props: {
     menuConfig: {},
-    menuName: String
+    menuName: String,
   },
   data() {
     return {
       menuList: this.menuConfig.MenuConfig,
-      //isWide: true,
+      isWide: true,
       regionCount: {}
     }
   },
@@ -93,8 +93,14 @@ export default {
       }
       return newArr.concat([cinema]).filter(item => !item.isHide);
     },
-    isWide() {
-      return this.$route.path === '/main' && (document.body.clientWidth || window.screen.width || window.innerWidth) > 1438;
+  },
+  watch: {
+    menuName: function(newVal) {
+      if(newVal === 'main' && (document.body.clientWidth || window.screen.width || window.innerWidth) > 1438) {
+        this.isWide = true;
+      } else {
+        this.isWide = false;
+      }
     }
   },
   methods: {
@@ -129,9 +135,9 @@ export default {
     getCount(num) {
       return (num > 999 ? '999+' : num) || '--';
     },
-    // onSize() {
-    //   this.isWide = this.$route.path === '/main' && (document.body.clientWidth || window.screen.width || window.innerWidth) > 1438;
-    // },
+    onSize() {
+      this.isWide = this.$route.path === '/main' && (document.body.clientWidth || window.screen.width || window.innerWidth) > 1438;
+    },
     //手动切换菜单栏时对应的item高亮
     setCurrentState(item) {
       let route = item.route;
@@ -144,8 +150,8 @@ export default {
   },
   mounted() {
     this.updateCount();
-    //this.onSize();
-    //window.addEventListener('resize', ()=>this.onSize());
+    this.onSize();
+    window.addEventListener('resize', ()=>this.onSize());
   },
 }
 

@@ -6,7 +6,9 @@ const { listUsers, showUserDetail, updateUser, deleteUser } = require('./../cont
 const { getBanner } = require('./../controllers/banner')
 const { getRegionCount } = require('./../controllers/count')
 
-const { getRotation, getRecommend, getExtension, getAd } = require('./../controllers/report')
+const { getRotation, getRecommend, getExtension, getAd, getAdBanner } = require('./../controllers/report')
+
+const { getDynamic } = require('./../controllers/dynamic')
 
 router.get('/', async (ctx, next) => {
   await ctx.render('index', {
@@ -58,17 +60,25 @@ router.get('/count', async (ctx, next) => {
 })
 
 // report 相关的路由
-router.get('/rotation', async (ctx, next) => {
+router.get('/report/rotation', async (ctx, next) => {
   getRotation(ctx, next)
 });
-router.get('/recommend', async (ctx, next) => {
+router.get('/report/recommend', async (ctx, next) => {
   getRecommend(ctx, next)
 });
-router.get('/extension', async (ctx, next) => {
+router.get('/report/extension', async (ctx, next) => {
   getExtension(ctx, next)
 });
-router.get('/ad', async (ctx, next) => {
+router.get('/report/ad', async (ctx, next) => {
   getAd(ctx, next)
+});
+router.get('/report/adbanner', async (ctx, next) => {
+  getAdBanner(ctx, next)
+});
+
+// dynamic
+router.get('/dynamic/:rid', async (ctx, next) => {
+  getDynamic(ctx, next)
 });
 
 module.exports = router

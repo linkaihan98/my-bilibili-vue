@@ -1,24 +1,26 @@
 <template>
   <div class="ex-video-card">
     <div class="card-pic">
-      <a :href="item.url" target="_blank">
-        <img :src="item.pic" width="206" height="116">
-        <div class="count">
-          <div class="left"></div>
-          <div class="right">
-            <span v-if="archive">{{ duration }}</span>
-          </div>
+      <a :href="item.url"  class="card-pic-link" target="_blank">
+        <img :src="item.pic" class="item-pic">
+        <div class="hover-detail">
+          <span v-if="archive">{{ duration }}</span>
         </div>
-        <p class="ex-title">{{ item.title || item.name}}</p>
       </a>
+      <watch-later v-if="archive" class="watch-later-video"></watch-later>
     </div>
+    <a :href="item.url" target="_blank" class="ex-title" :title="title">{{ title }}</a>
   </div>
 </template>
 
 <script>
+import WatchLater from '../../../public/watch-later';
 import { formatDuration } from './../../../../utils';
 
 export default {
+  components: {
+    WatchLater
+  },
   props: {
     item: {
       type: Object,
@@ -30,7 +32,8 @@ export default {
   data(){
     return {
       formatDuration,
-      archive: this.item && this.item.archive || null
+      archive: this.item && this.item.archive || null,
+      title: this.item && (this.item.title || this.item.name || '')
     }
   },
   computed: {
@@ -51,66 +54,30 @@ export default {
     position: relative;
     width: 100%;
     height: 116px;
-    a
+    .card-pic-link
       display: block;
       position: relative;
       width: 100%;
       height: 100%;
-      //background-image: url('~g-public/images/icon/img_loading.png');
-      background-repeat: no-repeat;
-      background-position: center;
-      &::before
-        content: '';
-        position: absolute;
-        width: 100%;
-        height: 48px;
-        bottom: 0;
-        left: 0;
-        border-radius: 2px;
-        //background-image: url(~g-public/images/linear.png);
-        background-repeat: repeat-x;
-      img 
+      .item-pic
         width: 100%;
         height: 100%;
         border-radius: 2px;
-      .count
+      .hover-detail
         position: absolute;
         bottom: 0;
         width: 100%;
         padding: 6px 8px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+        font-size: 12px;
+        line-height: 16px;  
         color: #fff;
-        line-height: 16px;
-        // text-shadow: 0 1px 1px rgba(0,0,0,0.24);
-        .left
-          display: flex;
-          align-items: center;
-          span
-            vertical-align: middle;
-            display: flex;
-            align-items: center;
-            &:first-child
-              margin-right: 10px;            
-      .crown
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 40px;
-        height: 24px;
-        background-size: contain;
-        &.gold
-          //background-image: url('~g-public/images/icon_gold.png');
-        &.silver 
-          //background-image: url('~g-public/images/icon_silver.png');
     .watch-later-video
       transition: opacity .3s;
       opacity: 0;
     &:hover
       .watch-later-video
         transition-delay: .2s;
-        opacity: 1;
+        opacity: 0.9;
   .ex-title
     display: block;
     font-size: 14px;
@@ -119,35 +86,8 @@ export default {
     height: 40px;
     overflow: hidden;
     text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    /*! autoprefixer: ignore next */
-    -webkit-box-orient: vertical;
     font-weight: 500;
     padding-right: 12px;
-  .ex-up 
-    display: flex;
-    align-items: center;
-    font-size: 12px;
-    color: #999;
-    line-height: 16px;
-    margin-top: 60px;
-    &:hover
-      color: #00A1D6;
-  .bilifont 
-    margin-right: 4px;
-    vertical-align: middle;
-  .gg-icon 
-    display: inline-block;
-    font-size: 12px;
-    border-radius: 2px;
-    margin-right: 8px;
-    width: 30px;
-    height: 16px;
-    line-height: 16px;
-    text-align: center;
-    border:1px solid #b2b2b2;
-    color: #b2b2b2;
 
 .ex-video-card
   @media screen and (max-width: 1870px)
@@ -158,5 +98,7 @@ export default {
       display: none;
   @media screen and (max-width: 1438px)
     width: 170px;
+    .card-pic
+      height: 96px;
 
 </style>

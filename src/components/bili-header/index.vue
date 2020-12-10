@@ -37,11 +37,11 @@ export default {
     menuName: function() {
       const name = this.$route.path.split('/')[2];
       const currentMenu = this.menuConfig.MenuConfig.filter(menu => {
-        return menu.route === name || name === 'cinema';
+        return menu.route === name || name === 'cinema' || name === 'popular';
       })
       if (currentMenu[0]) {
-        return name === 'cinema' ? 'cinema' : currentMenu[0].route;
-      } else if (this.$route.path === '/main' || this.$route.path === '/v/popular') {
+        return name === 'cinema' ? 'cinema' : ( name === 'popular' ? 'popular' : currentMenu[0].route);
+      } else if (this.$route.path === '/main') {
         return 'main';
       } else {
         return null;
@@ -49,7 +49,7 @@ export default {
     },
     // 热门页面/v/popular保持banner渲染，移除primary-menu
     showMenu: function() {
-      return this.$route.path !== '/v/popular';
+      return this.menuName && (this.menuName !== 'popular');
     },
     // 控制banner和primary-menu两个组件是否渲染
     // 需要渲染的页面包括：首页，以‘/v/’开头的各个分区

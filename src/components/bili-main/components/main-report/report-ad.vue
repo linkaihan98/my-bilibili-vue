@@ -39,17 +39,18 @@ export default {
   @media screen and (max-width: 1438px)
     width: 265px;
   .online
+    width: 100%;
+    height: 30px;
+    margin: 3px 0 19px;
+    border: 1px solid #E7E7E7;
+    border-radius: 2px;
+    line-height: 30px;
+    font-size: 12px;
+    color: #505050;
+    background: #F4F4F4;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-top: 3px;
-    margin-bottom: 19px;
-    height: 30px;
-    border: 1px solid #E7E7E7;
-    border-radius: 2px;
-    background: #F4F4F4;
-    color: #505050;
-    line-height: 30px;
     .online-link
       flex: 1;
       text-align: center;

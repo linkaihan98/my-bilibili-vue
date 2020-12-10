@@ -1,4 +1,4 @@
-export default [
+const rankMenuCongfig = [
   {
     // bangumi
     cname: '番剧',
@@ -97,3 +97,5 @@ export default [
     rid: 11,
   },
 ]
+
+module.exports = rankMenuCongfig

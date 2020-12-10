@@ -45,7 +45,7 @@ export default {
         getBannerData(menuName) {
             // getBanner()为首页banner与分区banner两个不同接口合并的api
             // 通过三元表达式进行数据格式化
-            const isMain = menuName === 'main';
+            const isMain = menuName === ('main' || 'popular');
             getBanner(menuName).then((response) => {
                 const res = response.data;
                 if (res && res.code === 0 && res.data) {     
@@ -65,7 +65,7 @@ export default {
             this.getBannerData(newVal)
         }
     },
-    created() {
+    mounted() {
         this.getBannerData(this.menuName);
     }
 }
