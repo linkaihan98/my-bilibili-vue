@@ -45,11 +45,9 @@ export default {
   methods: {
     async getData() {
       const res = await getDynamic(this.rid);
-      if(res && res.data) {
-        const resList = res.data;
-        if(resList && resList.code ===0 && resList.data) {
-          this.list = resList.data.archives || [];
-        }
+      const resList = res && res.data;
+      if(resList && resList.code ===0 && resList.data) {
+        this.list = resList.data.archives || [];
       }
     }
   },

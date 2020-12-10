@@ -2,6 +2,8 @@
   <SpaceBetween>
     <video-list :info="info"></video-list>
 
+     <rank-list :info="info"></rank-list>
+
     <!-- pgc rank -->
     <!-- <PgcRank v-if="info.type === 'teleplay' || info.type === 'movie' || info.type === 'documentary'" 
       :info="info"
@@ -17,6 +19,7 @@
 <script>
 import SpaceBetween from './../../../public/space-between'
 import VideoList from './../../../public/video-list'
+import RankList from '../../../public/rank-list'
 
 //import Rank from 'g-public/components/international/Rank'
 //import PgcRank from 'g-public/components/international/PgcRank'
@@ -25,6 +28,7 @@ export default {
   components: {
     SpaceBetween,
     VideoList,
+    RankList,
     //Rank,
     //PgcRank
   },

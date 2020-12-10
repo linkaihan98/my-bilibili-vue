@@ -16,6 +16,10 @@ const adUrl = 'http://api.bilibili.com/x/web-show/res/locs?ids=29'
 // params{number} 'rid=xxx'
 const dynamicUrl = 'https://api.bilibili.com/x/web-interface/dynamic/region?ps=12&rid='
 
+// 分区排行榜 热门一百条
+// params{number} 'rid=xxx'
+const rankUrl = 'https://api.bilibili.com/x/web-interface/ranking/v2?rid='
+
 module.exports = {
   bannerUrl,
   regionCountUrl,
@@ -23,5 +27,6 @@ module.exports = {
   recommendUrl,
   extensionUrl,
   adUrl,
-  dynamicUrl
+  dynamicUrl,
+  rankUrl
 }

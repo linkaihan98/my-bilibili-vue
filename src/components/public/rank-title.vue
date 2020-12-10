@@ -1,16 +1,18 @@
 <template>
-  <header class="rank-header">
+  <div class="rank-header">
     <span class="name">排行榜</span>
     <slot name="center"></slot>
-    <a v-if="info.type !== 'ad'"
-       class="more"
-       :href="link"
-       target="_blank">更多<i class="bilifont bili-icon_caozuo_qianwang"></i></a>
-  </header>
+    <watch-more></watch-more>
+  </div>
 </template>
 
 <script>
+import watchMore from './watch-more';
+
 export default {
+  components: { 
+    watchMore 
+  },
   props: {
     link: {
       type: String,

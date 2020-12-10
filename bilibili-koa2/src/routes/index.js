@@ -10,6 +10,8 @@ const { getRotation, getRecommend, getExtension, getAd, getAdBanner } = require(
 
 const { getDynamic } = require('./../controllers/dynamic')
 
+const { getRank } = require('./../controllers/rank')
+
 router.get('/', async (ctx, next) => {
   await ctx.render('index', {
     title: 'Hello Koa 2!'
@@ -79,6 +81,11 @@ router.get('/report/adbanner', async (ctx, next) => {
 // dynamic
 router.get('/dynamic/:rid', async (ctx, next) => {
   getDynamic(ctx, next)
+});
+
+// rank
+router.get('/rank/:rid', async (ctx, next) => {
+  getRank(ctx, next)
 });
 
 module.exports = router
